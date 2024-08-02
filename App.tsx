@@ -1,118 +1,102 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
+import { NavigationContainer } from '@react-navigation/native';
 import React from 'react';
-import type {PropsWithChildren} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { LogBox, Text, useColorScheme } from 'react-native';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+import ColorServices from './src/services/color-services';
+import { enableScreens } from 'react-native-screens';
+import MainScreens from './src/screens/main-screens/main-screens';
+import ReelVideoSwiper from './src/screens/reel-videos-swiper/reel-video-swiper';
+import Login from './src/screens/login/login';
+import SplashScreen from './src/screens/splash-screen/splash-screen';
+import ImageDetailList from './src/screens/images-detail-list/images-detail-list';
+import UploadPost from './src/screens/upload-posts/upload-post';
+import PostDetail from './src/screens/post-detail/post-detail';
+import UploadReel from './src/screens/upload-reels/upload-reels';
+import PersonalProfile from './src/screens/personal-profile/personal-profile';
+import MessageBox from './src/screens/message-box/message-box';
 
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
+enableScreens();
+LogBox.ignoreLogs(['@firebase/auth']);
+const Stack = createNativeStackNavigator();
 
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
-
-function App(): React.JSX.Element {
+const App = () => {
   const isDarkMode = useColorScheme() === 'dark';
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+    <NavigationContainer>
+      <Stack.Navigator screenOptions={{
+        headerStyle: {
+          backgroundColor: ColorServices.primaryColor,
+        },
+        headerTintColor: 'white',
+        headerTitleAlign: 'center',
+        headerTitleStyle: {
+          fontWeight: 'bold',
+        },
+      }}>
+        <Stack.Screen
+          name="SplashScreen"
+          component={SplashScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Login"
+          component={Login}
+          options={{ headerShown: false, title: "Login" }}
+        />
+        <Stack.Screen
+          name="Home"
+          component={MainScreens}
+          options={{ headerShown: false, title: "home" }}
+        />
+        <Stack.Screen
+          name="ImagesDetailList"
+          component={ImageDetailList}
+          options={{ headerShown: false, title: "Chi tiết hình ảnh" }}
+        />
+
+        <Stack.Screen
+          name="ReelVideoSwiper"
+          component={ReelVideoSwiper}
+          options={{ headerShown: false }}
+        />
+
+        <Stack.Screen
+          name="UploadPost"
+          component={UploadPost}
+          options={{ headerShown: true, title :'Tạo bài đăng' }}
+        />
+         <Stack.Screen
+          name="PostDetail"
+          component={PostDetail}
+          options={{ headerShown: true, title :'' }}
+        />
+         <Stack.Screen
+          name="UploadReels"
+          component={UploadReel}
+          options={{
+            headerShown: true,
+            title: 'Thêm tin mới',
+            headerStyle: {
+              backgroundColor: '#fff', // Set Appbar background color to white
+            },
+            headerTintColor: '#000', // Set Appbar text color to black (or any other color you prefer)
+          }}
+        />
+        <Stack.Screen
+          name="PersonalProfile"
+          component={PersonalProfile}
+          options={{ headerShown: true, title :'Thông tin cá nhân' }}
+        />
+        <Stack.Screen
+          name="MessageBox"
+          component={MessageBox}
+          options={{ headerShown: false, title :'Nhắn tin' }}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
 
 export default App;
